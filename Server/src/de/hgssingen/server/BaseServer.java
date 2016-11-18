@@ -10,11 +10,11 @@ import de.hgssingen.server.msg.IMessage;
 public class BaseServer extends ServerSocket{
 	
 	private ArrayList<Socket> skt = new ArrayList<>();
-	private final MainServer server;
+	private MainServer server;
 	
-	public BaseServer(int i, MainServer mainServer) throws IOException {
+	public BaseServer(int i) throws IOException {
 		super(i);
-		this.server = mainServer;
+		this.server = MainServer.getInstance();
 		blockAndAccept();
 	}
 

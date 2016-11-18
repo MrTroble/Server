@@ -14,7 +14,7 @@ public class MainServer {
 	public MainServer(int i){
 		log.println("Server Beginn Loading");
 		try{
-		this.SERVER_INSTANCE = new BaseServer(i,this);
+		this.SERVER_INSTANCE = new BaseServer(i);
 		}catch(Throwable t){
 			err.println("Server Failed Loading");
 			t.printStackTrace(err);
