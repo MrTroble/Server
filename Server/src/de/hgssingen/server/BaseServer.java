@@ -32,7 +32,7 @@ public class BaseServer extends ServerSocket{
 					int i = 0;
 				    while((i = str.read()) >= 0){
 				    	if(i == Byte.MAX_VALUE){
-				    		readMessage(btr);
+				    		readMessage(btr,sk);
 				    		btr.clear();
 				    	}else{
 					    	btr.add((byte) i);
@@ -62,9 +62,9 @@ public class BaseServer extends ServerSocket{
 		}
 	}
 	
-	public void readMessage(ArrayList<Byte> bts){
+	public void readMessage(ArrayList<Byte> bts,Socket s){
 		for(Message msg : Message.reader){
-			msg.fromByte(bts);
+			msg.fromByte(bts,s);
 		}
 	}
 	

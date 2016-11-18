@@ -1,5 +1,6 @@
 package de.hgssingen.server.msg;
 
+import java.net.Socket;
 import java.util.ArrayList;
 
 public abstract class Message {
@@ -13,7 +14,7 @@ public abstract class Message {
 
 	public abstract void toByte(ArrayList<Byte> list);
 	
-	public abstract void fromByte(ArrayList<Byte> list);
+	public abstract void fromByte(ArrayList<Byte> list,Socket sk);
 	
 	public abstract boolean isReader();
 	
