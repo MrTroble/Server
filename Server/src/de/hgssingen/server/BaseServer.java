@@ -10,9 +10,11 @@ import de.hgssingen.server.msg.IMessage;
 public class BaseServer extends ServerSocket{
 	
 	private ArrayList<Socket> skt = new ArrayList<>();
+	private final MainServer server;
 	
-	public BaseServer(int i) throws IOException {
+	public BaseServer(int i, MainServer mainServer) throws IOException {
 		super(i);
+		this.server = mainServer;
 		blockAndAccept();
 	}
 
@@ -21,7 +23,7 @@ public class BaseServer extends ServerSocket{
 			Socket sk = this.accept();
 			skt.add(sk);
 		} catch (Throwable e) {
-			System.err.println("An Erroring Socket while Init");
+			server.err.println("An Erroring Socket while Init");
 		}
 	}	
 	
@@ -37,8 +39,10 @@ public class BaseServer extends ServerSocket{
 		try {
 			sk.getOutputStream().write(args);
 		} catch (Exception e) {
-			System.err.println("Excepting Socket");
+			server.err.println("Excepting Socket");
 		}
 	}
+	
+	
 	
 }
