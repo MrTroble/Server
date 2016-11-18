@@ -1,11 +1,12 @@
 package de.hgssingen.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import de.hgssingen.server.msg.IMessage;
+import de.hgssingen.server.msg.Message;
 
 public class BaseServer extends ServerSocket{
 	
@@ -19,15 +20,33 @@ public class BaseServer extends ServerSocket{
 	}
 
 	private void blockAndAccept() {
-		try {
-			Socket sk = this.accept();
-			skt.add(sk);
-		} catch (Throwable e) {
-			server.err.println("An Erroring Socket while Init");
-		}
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					ArrayList<Byte> btr = new ArrayList<>();
+					Socket sk = accept();
+					skt.add(sk);
+					InputStream str = sk.getInputStream();
+					int i = 0;
+				    while((i = str.read()) >= 0){
+				    	if(i == Byte.MAX_VALUE){
+				    		readMessage(btr);
+				    		btr.clear();
+				    	}else{
+					    	btr.add((byte) i);
+				    	}
+				    }
+				} catch (Throwable e) {
+					server.err.println("An Erroring Socket while Init");
+				}
+			}
+		}).start();
 	}	
 	
-	public void sendMessageTo(Socket sk,IMessage msg){
+	public void sendMessageTo(Socket sk,Message msg){
+		if(!msg.isWriter())return;
 		ArrayList<Byte> bt = new ArrayList<>();
 		msg.toByte(bt);
 		byte[] args = new byte[bt.size()];
@@ -43,6 +62,10 @@ public class BaseServer extends ServerSocket{
 		}
 	}
 	
-	
+	public void readMessage(ArrayList<Byte> bts){
+		for(Message msg : Message.reader){
+			msg.fromByte(bts);
+		}
+	}
 	
 }
