@@ -18,6 +18,8 @@ public class BaseServer extends ServerSocket{
 		this.server = MainServer.getInstance();
 		blockAndAccept();
 	}
+	//TODO Lock:
+	//https://developer.apple.com/library/prerelease/content/qa/qa1652/_index.html#//apple_ref/doc/uid/DTS40008977
 
 	private void blockAndAccept() {
 		new Thread(new Runnable() {
@@ -28,6 +30,7 @@ public class BaseServer extends ServerSocket{
 					ArrayList<Byte> btr = new ArrayList<>();
 					Socket sk = accept();
 					skt.add(sk);
+					server.log.println(sk + " connected to Server");
 					InputStream str = sk.getInputStream();
 					int i = 0;
 				    while((i = str.read()) >= 0){
