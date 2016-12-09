@@ -11,11 +11,9 @@ import de.hgssingen.server.msg.Message;
 public class BaseServer extends ServerSocket{
 	
 	private ArrayList<Socket> skt = new ArrayList<>();
-	private MainServer server;
 	
 	public BaseServer(int i) throws IOException {
 		super(i);
-		this.server = MainServer.getInstance();
 		blockAndAccept();
 	}
 	//TODO Lock:
@@ -30,7 +28,7 @@ public class BaseServer extends ServerSocket{
 					ArrayList<Byte> btr = new ArrayList<>();
 					Socket sk = accept();
 					skt.add(sk);
-					server.log.println(sk + " connected to Server");
+					MainServer.log.println(sk + " connected to Server");
 					InputStream str = sk.getInputStream();
 					int i = 0;
 				    while((i = str.read()) >= 0){
@@ -42,8 +40,8 @@ public class BaseServer extends ServerSocket{
 				    	}
 				    }
 				} catch (Throwable e) {
-					server.err.println("An Erroring Socket while Init");
-					server.err.printTrace(e);
+					MainServer.err.println("An Erroring Socket while Init");
+					MainServer.err.printTrace(e);
 				}
 			}
 		}).start();
@@ -62,8 +60,8 @@ public class BaseServer extends ServerSocket{
 		try {
 			sk.getOutputStream().write(args);
 		} catch (Throwable e) {
-			server.err.println("Erroring Socket");
-			server.err.printTrace(e);
+			MainServer.err.println("Erroring Socket");
+			MainServer.err.printTrace(e);
 		}
 	}
 	

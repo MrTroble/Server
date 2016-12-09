@@ -1,5 +1,7 @@
 package de.hgssingen.server.command;
 
+import de.hgssingen.server.MainServer;
+
 public abstract class Command {
 	
 	private final String name,desc; 
@@ -18,8 +20,12 @@ public abstract class Command {
 	}
 	
 	public void execute(String name,String[] args){
+		try{
 		if(this.name.equals(name)){
 			this.onCommand(args);
+		}
+		}catch(Throwable t){
+			MainServer.err.printTrace(t);
 		}
 	}
 	

@@ -48,6 +48,7 @@ public class CommonLogger extends PrintStream{
 	}
 	
 	public void printTrace(Throwable t){
+		if(t == null)return;
 		this.print(t.toString());
 		this.print(t.getMessage());
 		for(StackTraceElement e : t.getStackTrace()){
@@ -71,6 +72,8 @@ public class CommonLogger extends PrintStream{
 		byte[] bu = (getTime() + "[" + this.section + "]" + new String(buf) + "\n").getBytes();
 		this.out.write(bu, off, bu.length);
 		this.file_stream.write(bu, off, bu.length);
+		this.file_stream.flush();
+		this.out.flush();
 		} catch (IOException e) {
 			e.printStackTrace(this);
 		}

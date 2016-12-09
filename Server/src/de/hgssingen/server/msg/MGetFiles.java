@@ -26,7 +26,7 @@ public class MGetFiles extends Message{
 	@Override
 	public void fromByte(ArrayList<Byte> list,Socket sk) {
 		if(new String(Util.toArray(list)).equals("request:files")){
-			MainServer.getInstance().getServer().sendMessageTo(sk, this);
+			MainServer.getServer().sendMessageTo(sk, this);
 		}
 	}
 
