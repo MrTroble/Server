@@ -38,6 +38,7 @@ public class BaseServer extends ServerSocket{
 					    	btr.add((byte) i);
 				    	}
 				    }
+				    str.close();
 				} catch (Throwable e) {
 					server.err.println("An Erroring Socket while Init");
 				}
@@ -64,6 +65,7 @@ public class BaseServer extends ServerSocket{
 	
 	public void readMessage(ArrayList<Byte> bts,Socket s){
 		for(Message msg : Message.reader){
+			if(msg.isReader())
 			msg.fromByte(bts,s);
 		}
 	}
