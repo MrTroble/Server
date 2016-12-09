@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import de.hgssingen.server.MainServer;
 import de.hgssingen.server.util.Util;
 
 public class MFile extends Message{
@@ -25,8 +26,8 @@ public class MFile extends Message{
 		str.close();
 		list.add(Byte.MAX_VALUE);
 		}catch(Throwable t){
-			sv.err.println("Error While Writing a File to Socket " + this.name);
-			t.printStackTrace(sv.err);
+			MainServer.err.println("Error While Writing a File to Socket " + this.name);
+			MainServer.err.printTrace(t);
 		}
 	}
 
@@ -36,11 +37,11 @@ public class MFile extends Message{
 		String str = new String(Util.toArray(list));
 		if(str.startsWith("requestfiles:")){
 			String st = str.split(":")[1]; 
-			sv.getServer().sendMessageTo(sk, new MFile(st));
+			MainServer.getServer().sendMessageTo(sk, new MFile(st));
 		}
 		}catch(Throwable t){
-			sv.err.println("Error While Reading a Message(File Request)");
-			t.printStackTrace(sv.err);
+			MainServer.err.println("Error While Reading a Message(File Request)");
+			MainServer.err.printTrace(t);
 		}
 	}
 

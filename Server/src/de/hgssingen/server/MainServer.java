@@ -53,8 +53,8 @@ public class MainServer {
 	}
 	
 	private static void awaitAdminInput() {
-		Scanner in = new Scanner(System.in);
 		while(true){
+			Scanner in = new Scanner(System.in);
 			if(in.hasNextLine()){
 				String n = in.nextLine();
 				if(n.startsWith("/")){
@@ -70,6 +70,7 @@ public class MainServer {
 					}
 				}
 			}
+			in.close();
 		}
 	}
 
