@@ -27,7 +27,7 @@ public class MainServer {
 				SERVER_INSTANCE = new BaseServer(i);
 				}catch(Throwable t){
 					err.println("Server Failed Loading");
-					t.printStackTrace(err);
+					err.printTrace(t);
 				}
 				log.println("End Loading");
 			}
@@ -56,6 +56,7 @@ public class MainServer {
 					});
 				}
 			}
+			in.close();
 		}
 	}
 

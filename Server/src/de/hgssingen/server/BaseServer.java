@@ -43,6 +43,7 @@ public class BaseServer extends ServerSocket{
 				    }
 				} catch (Throwable e) {
 					server.err.println("An Erroring Socket while Init");
+					server.err.printTrace(e);
 				}
 			}
 		}).start();
@@ -60,8 +61,9 @@ public class BaseServer extends ServerSocket{
 		}
 		try {
 			sk.getOutputStream().write(args);
-		} catch (Exception e) {
-			server.err.println("Excepting Socket");
+		} catch (Throwable e) {
+			server.err.println("Erroring Socket");
+			server.err.printTrace(e);
 		}
 	}
 	

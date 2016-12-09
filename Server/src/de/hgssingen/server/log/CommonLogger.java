@@ -36,8 +36,24 @@ public class CommonLogger extends PrintStream{
 	}	
 	
 	@Override
-	public void println(Object x) {
-		super.println(x);
+	public void println(String x) {
+		byte[] args = x.getBytes();
+        this.write(args, 0, args.length);
+	}
+	
+	@Override
+	public void print(String s) {
+		byte[] args = s.getBytes();
+        this.write(args, 0, args.length);
+	}
+	
+	public void printTrace(Throwable t){
+		this.print(t.toString());
+		this.print(t.getMessage());
+		for(StackTraceElement e : t.getStackTrace()){
+			this.print(e.toString());
+		}
+		this.printTrace(t.getCause());
 	}
 	
 	boolean write = true;
