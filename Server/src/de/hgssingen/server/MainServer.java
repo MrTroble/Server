@@ -1,35 +1,84 @@
 package de.hgssingen.server;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import de.hgssingen.server.command.Command;
+import de.hgssingen.server.command.CommandSetRoll;
 import de.hgssingen.server.log.CommonLogger;
 
 public class MainServer {
 
-	private BaseServer SERVER_INSTANCE; 
-	public final CommonLogger log = new CommonLogger(System.out, "INFO");
-	public final CommonLogger err = new CommonLogger(System.err, "ERROR");
-	public final CommonLogger debug = new CommonLogger(System.err, "DEBUG");
+	private static BaseServer SERVER_INSTANCE; 
+	public static final CommonLogger log = new CommonLogger(System.out, "INFO");
+	public static final CommonLogger err = new CommonLogger(System.err, "ERROR");
+	public static final CommonLogger debug = new CommonLogger(System.out, "DEBUG");
+	public static final ArrayList<Command> cmds = new ArrayList<>();
 
-	private static MainServer INSTANCE;
-	
-	public MainServer(int i){
-		log.println("Server Beginn Loading");
-		try{
-		this.SERVER_INSTANCE = new BaseServer(i);
-		}catch(Throwable t){
-			err.println("Server Failed Loading");
-			t.printStackTrace(err);
-		}
+	public static void startServer(int i){
+		
+		cmds.add(new CommandSetRoll());
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				log.println("Server Beginn Loading");
+				try{
+				SERVER_INSTANCE = new BaseServer(i);
+				}catch(Throwable t){
+					err.println("Server Failed Loading");
+					err.printTrace(t);
+				}
+				log.println("End Loading");
+			}
+		}).start();
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while(true){
+					System.gc();
+					try {
+						Thread.sleep(100000);
+					} catch (InterruptedException e) {
+						log.printTrace(e);
+					}
+				}
+			}
+		}).start();
+		
+		awaitAdminInput();
 	}
 	
-	public BaseServer getServer(){
-		return this.SERVER_INSTANCE;
+	private static void awaitAdminInput() {
+		Scanner in = new Scanner(System.in);
+		while(true){
+			if(in.hasNextLine()){
+				String n = in.nextLine();
+				if(n.startsWith("/")){
+					String[] args = n.replaceFirst("/", "").split(" ");
+					String[] arg = new String[args.length];
+					int i = 0;
+					for(String s : args){
+						if(i > 0)arg[i] = s;
+							i++;
+					}
+					for(Command c : cmds){
+						c.execute(args[0], arg);
+					}
+				}
+			}
+		}
+	}
+
+	public static BaseServer getServer(){
+		return SERVER_INSTANCE;
 	}
 	
 	public static void main(String[] args) {
-		INSTANCE = new MainServer(5995);
+		startServer(5995);
 	}
-	
-	public static MainServer getInstance(){
-		return INSTANCE;
-	}
+
 }

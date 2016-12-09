@@ -11,13 +11,13 @@ import de.hgssingen.server.msg.Message;
 public class BaseServer extends ServerSocket{
 	
 	private ArrayList<Socket> skt = new ArrayList<>();
-	private MainServer server;
 	
 	public BaseServer(int i) throws IOException {
 		super(i);
-		this.server = MainServer.getInstance();
 		blockAndAccept();
 	}
+	//TODO Lock:
+	//https://developer.apple.com/library/prerelease/content/qa/qa1652/_index.html#//apple_ref/doc/uid/DTS40008977
 
 	private void blockAndAccept() {
 		new Thread(new Runnable() {
@@ -28,6 +28,7 @@ public class BaseServer extends ServerSocket{
 					ArrayList<Byte> btr = new ArrayList<>();
 					Socket sk = accept();
 					skt.add(sk);
+					MainServer.log.println(sk + " connected to Server");
 					InputStream str = sk.getInputStream();
 					int i = 0;
 				    while((i = str.read()) >= 0){
@@ -40,7 +41,8 @@ public class BaseServer extends ServerSocket{
 				    }
 				    str.close();
 				} catch (Throwable e) {
-					server.err.println("An Erroring Socket while Init");
+					MainServer.err.println("An Erroring Socket while Init");
+					MainServer.err.printTrace(e);
 				}
 			}
 		}).start();
@@ -58,8 +60,9 @@ public class BaseServer extends ServerSocket{
 		}
 		try {
 			sk.getOutputStream().write(args);
-		} catch (Exception e) {
-			server.err.println("Excepting Socket");
+		} catch (Throwable e) {
+			MainServer.err.println("Erroring Socket");
+			MainServer.err.printTrace(e);
 		}
 	}
 	
