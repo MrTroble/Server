@@ -26,8 +26,8 @@ public class MFile extends Message{
 		str.close();
 		list.add(Byte.MAX_VALUE);
 		}catch(Throwable t){
-			MainServer.err.println("Error While Writing a File to Socket " + this.name);
-			MainServer.err.printTrace(t);
+			MainServer.err.write("Error While Writing a File to Socket " + this.name);
+			MainServer.err.writeTrace(t);
 		}
 	}
 
@@ -40,8 +40,8 @@ public class MFile extends Message{
 			MainServer.getServer().sendMessageTo(sk, new MFile(st));
 		}
 		}catch(Throwable t){
-			MainServer.err.println("Error While Reading a Message(File Request)");
-			MainServer.err.printTrace(t);
+			MainServer.err.write("Error While Reading a Message(File Request)");
+			MainServer.err.writeTrace(t);
 		}
 	}
 

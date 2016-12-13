@@ -10,9 +10,9 @@ import de.hgssingen.server.log.CommonLogger;
 public class MainServer {
 
 	private static BaseServer SERVER_INSTANCE; 
-	public static final CommonLogger log = new CommonLogger(System.out, "INFO");
-	public static final CommonLogger err = new CommonLogger(System.err, "ERROR");
-	public static final CommonLogger debug = new CommonLogger(System.out, "DEBUG");
+	public static CommonLogger log;
+	public static CommonLogger err;
+	public static CommonLogger debug;
 	public static final ArrayList<Command> cmds = new ArrayList<>();
 
 	public static void startServer(int i){
@@ -23,14 +23,14 @@ public class MainServer {
 			
 			@Override
 			public void run() {
-				log.println("Server Beginn Loading");
+				log.write("Server Beginn Loading");
 				try{
 				SERVER_INSTANCE = new BaseServer(i);
 				}catch(Throwable t){
-					err.println("Server Failed Loading");
-					err.printTrace(t);
+					err.write("Server Failed Loading");
+					err.writeTrace(t);
 				}
-				log.println("End Loading");
+				log.write("End Loading");
 			}
 		}).start();
 		
@@ -43,7 +43,7 @@ public class MainServer {
 					try {
 						Thread.sleep(100000);
 					} catch (InterruptedException e) {
-						log.printTrace(e);
+						log.writeTrace(e);
 					}
 				}
 			}
@@ -59,10 +59,11 @@ public class MainServer {
 				String n = in.nextLine();
 				if(n.startsWith("/")){
 					String[] args = n.replaceFirst("/", "").split(" ");
-					String[] arg = new String[args.length];
-					int i = 0;
+					String[] arg = new String[args.length - 1];
+					int i = 1;
 					for(String s : args){
-						if(i > 0)arg[i] = s;
+						   if(i >= arg.length)break;
+						   arg[i] = s;
 							i++;
 					}
 					for(Command c : cmds){
@@ -79,6 +80,9 @@ public class MainServer {
 	}
 	
 	public static void main(String[] args) {
+		log = new CommonLogger(System.out, "INFO");
+		err = new CommonLogger(System.err, "ERROR");
+		debug = new CommonLogger(System.out, "DEBUG");
 		startServer(5995);
 	}
 

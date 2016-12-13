@@ -1,82 +1,59 @@
 package de.hgssingen.server.log;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.Calendar;
-import java.util.Date;
+import java.io.*;
+import java.util.*;
 
-public class CommonLogger extends PrintStream{
+public class CommonLogger{
 
 	public FileOutputStream file_stream;
 	public String section;
+	public PrintStream stream;
 	
-	public CommonLogger(OutputStream str,String st) {
-		super(str);
+	public CommonLogger(PrintStream str,String st) {
 		this.section = st;
+		this.stream = str;
 		File fl = new File(System.getProperty("user.dir") + File.separator + "logs");
 		if(fl.mkdir()){
 			System.err.println(fl.getPath());
-			throw new NullPointerException("Directory Creation failed");
 		}
-		fl = new File(fl.getPath() + File.separator + this.section + " " + getDate() + ".log");
+		File fls = new File(fl.getPath() + File.separator + this.section + " " + getDate() + ".log");
 		int i = 1;
-		while(fl.exists()){
-			fl = new File(fl.getPath().replace("(", ":").split(":")[0].replace(".log", "") + "(" + i + ").log");
+		while(fls.exists()){
+			fl = new File(fls.getPath().replace("(", "##").split("##")[0].replace(".log", "") + "(" + i + ").log");
+			fls = fl;
 			i++;
 		}
 		try {
-			this.file_stream = new FileOutputStream(fl);
+			this.file_stream = new FileOutputStream(fls);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}	
 	
-	@Override
-	public void println(String x) {
+	public void write(String x) {
 		byte[] args = x.getBytes();
-        this.write(args, 0, args.length);
+        this.writeByte(args);
 	}
 	
-	@Override
-	public void print(String s) {
-		byte[] args = s.getBytes();
-        this.write(args, 0, args.length);
-	}
-	
-	public void printTrace(Throwable t){
+	public void writeTrace(Throwable t){
 		if(t == null)return;
-		this.print(t.toString());
-		this.print(t.getMessage());
+		this.write(t.toString());
+		this.write(t.getMessage());
 		for(StackTraceElement e : t.getStackTrace()){
-			this.print(e.toString());
+			this.write(e.toString());
 		}
-		this.printTrace(t.getCause());
+		this.writeTrace(t.getCause());
 	}
 	
 	boolean write = true;
 	
-	@Override
-	public void write(byte[] buf, int off, int len) {
-		synchronized (this) {
-			if(write){
-				write = false;
-			}else{
-				write = true;
-				return;
-			}
+	private void writeByte(byte[] buf) {
 		try {
 		byte[] bu = (getTime() + "[" + this.section + "]" + new String(buf) + "\n").getBytes();
-		this.out.write(bu, off, bu.length);
-		this.file_stream.write(bu, off, bu.length);
-		this.file_stream.flush();
-		this.out.flush();
+		this.stream.print(new String(bu));
+		this.file_stream.write(bu, 0, bu.length);
 		} catch (IOException e) {
-			e.printStackTrace(this);
-		}
+			e.printStackTrace();
 		}
 	}
 	

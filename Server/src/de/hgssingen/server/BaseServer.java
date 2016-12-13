@@ -28,7 +28,7 @@ public class BaseServer extends ServerSocket{
 					ArrayList<Byte> btr = new ArrayList<>();
 					Socket sk = accept();
 					skt.add(sk);
-					MainServer.log.println(sk + " connected to Server");
+					MainServer.log.write(sk + " connected to Server");
 					InputStream str = sk.getInputStream();
 					int i = 0;
 				    while((i = str.read()) >= 0){
@@ -41,8 +41,8 @@ public class BaseServer extends ServerSocket{
 				    }
 				    str.close();
 				} catch (Throwable e) {
-					MainServer.err.println("An Erroring Socket while Init");
-					MainServer.err.printTrace(e);
+					MainServer.err.write("An Erroring Socket while Init");
+					MainServer.err.writeTrace(e);
 				}
 			}
 		}).start();
@@ -61,8 +61,8 @@ public class BaseServer extends ServerSocket{
 		try {
 			sk.getOutputStream().write(args);
 		} catch (Throwable e) {
-			MainServer.err.println("Erroring Socket");
-			MainServer.err.printTrace(e);
+			MainServer.err.write("Erroring Socket");
+			MainServer.err.writeTrace(e);
 		}
 	}
 	

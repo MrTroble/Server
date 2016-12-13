@@ -12,17 +12,17 @@ public class CommandSetRoll extends Command{
 	public void onCommand(String[] args) {
 		if(args == null)throw new NullPointerException("Command execution failed please try again");
 		if(args.length == 0){
-			MainServer.log.print("Rolles:");
+			MainServer.log.write("Rolles:");
 			for(Rolles r : Rolles.values()){
-				MainServer.log.print(r.toString());
+				MainServer.log.write(r.toString());
 			}
 			return;
 		}
 		if(args.length == 2){
-			MainServer.debug.print("Saved roll " + args[0] + " for MAC-Adress " + args[1]);
+			MainServer.debug.write("Saved roll " + args[0] + " for MAC-Adress " + args[1]);
 		    return;
 		}
-		MainServer.log.println("Wrong Arguments (" + args.length + ") 0 or 2 are requiered");
+		MainServer.log.write("Wrong Arguments (" + args.length + ") 0 or 2 are requiered");
 	}
 
 }

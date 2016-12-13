@@ -25,7 +25,7 @@ public abstract class Command {
 			this.onCommand(args);
 		}
 		}catch(Throwable t){
-			MainServer.err.printTrace(t);
+			MainServer.err.writeTrace(t);
 		}
 	}
 	
