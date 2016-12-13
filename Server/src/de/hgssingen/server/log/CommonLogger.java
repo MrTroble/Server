@@ -49,7 +49,7 @@ public class CommonLogger{
 	
 	private void writeByte(byte[] buf) {
 		try {
-		byte[] bu = (getTime() + "[" + this.section + "]" + new String(buf) + "\n").getBytes();
+		byte[] bu = String.format(getTime() + "[" + this.section + "]" + new String(buf) + "%n").getBytes();
 		this.stream.print(new String(bu));
 		this.file_stream.write(bu, 0, bu.length);
 		} catch (IOException e) {

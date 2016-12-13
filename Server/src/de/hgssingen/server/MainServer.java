@@ -60,11 +60,10 @@ public class MainServer {
 				if(n.startsWith("/")){
 					String[] args = n.replaceFirst("/", "").split(" ");
 					String[] arg = new String[args.length - 1];
-					int i = 1;
-					for(String s : args){
-						   if(i >= arg.length)break;
-						   arg[i] = s;
-							i++;
+					int i = 0;
+					for(String s : args){   
+						if(i != 0)arg[i - 1] = s;
+						i++;
 					}
 					for(Command c : cmds){
 						c.execute(args[0], arg);
