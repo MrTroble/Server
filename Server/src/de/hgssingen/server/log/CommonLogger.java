@@ -1,7 +1,12 @@
 package de.hgssingen.server.log;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CommonLogger{
 

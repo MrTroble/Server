@@ -31,11 +31,19 @@ public class BaseServer extends ServerSocket{
 					MainServer.log.write(sk + " connected to Server");
 					InputStream str = sk.getInputStream();
 					int i = 0;
+					byte[] lastBytes = new byte[6];
+					
 				    while((i = str.read()) >= 0){
-				    	if(i == Byte.MAX_VALUE){
+				    	if(btr.size() > 6){
+						    for(int x = 5;x > 0;x--){
+						    	lastBytes[5 - x] = btr.get(btr.size() - x); 
+						    }
+				        }
+				    	if(new String(lastBytes).equals("endpak")){
 				    		readMessage(btr,sk);
 				    		btr.clear();
 				    	}else{
+				    		MainServer.debug.write(String.valueOf(i));
 					    	btr.add((byte) i);
 				    	}
 				    }

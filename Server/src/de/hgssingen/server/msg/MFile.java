@@ -1,6 +1,7 @@
 package de.hgssingen.server.msg;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
