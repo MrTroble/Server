@@ -23,14 +23,13 @@ public class MainServer {
 			
 			@Override
 			public void run() {
-				log.write("Server Beginn Loading");
+				log.write("Server started on port " + i);
 				try{
 				SERVER_INSTANCE = new BaseServer(i);
 				}catch(Throwable t){
-					err.write("Server Failed Loading");
+					err.write("Server failed loading");
 					err.writeTrace(t);
 				}
-				log.write("End Loading");
 			}
 		}).start();
 		
@@ -41,14 +40,14 @@ public class MainServer {
 				while(true){
 					System.gc();
 					try {
-						Thread.sleep(100000);
+						Thread.sleep(10000);
 					} catch (InterruptedException e) {
 						log.writeTrace(e);
 					}
 				}
 			}
 		}).start();
-		
+		log.write("Await admin input...");
 		awaitAdminInput();
 	}
 	

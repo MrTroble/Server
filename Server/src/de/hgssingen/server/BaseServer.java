@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import de.hgssingen.server.msg.Message;
 
@@ -20,40 +21,45 @@ public class BaseServer extends ServerSocket{
 	//https://developer.apple.com/library/prerelease/content/qa/qa1652/_index.html#//apple_ref/doc/uid/DTS40008977
 
 	private void blockAndAccept() {
+		while(true){
+		Socket sk;
+		try {
+			sk = accept();
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				try {
-					ArrayList<Byte> btr = new ArrayList<>();
-					Socket sk = accept();
+					String s = "";
 					skt.add(sk);
-					MainServer.log.write(sk + " connected to Server");
+					MainServer.log.write(sk + " connected to server");
 					InputStream str = sk.getInputStream();
-					int i = 0;
-					byte[] lastBytes = new byte[6];
-					
-				    while((i = str.read()) >= 0){
-				    	if(btr.size() > 6){
-						    for(int x = 5;x > 0;x--){
-						    	lastBytes[5 - x] = btr.get(btr.size() - x); 
-						    }
-				        }
-				    	if(new String(lastBytes).equals("endpak")){
-				    		readMessage(btr,sk);
-				    		btr.clear();
-				    	}else{
-				    		MainServer.debug.write(String.valueOf(i));
-					    	btr.add((byte) i);
+					Scanner sc = new Scanner(str);
+				    while(sc.hasNext()){
+				    	s += sc.next();
+			    		MainServer.debug.write(s);
+				    	if(s.endsWith("EndConnectedMessage")){
+				    		ArrayList<Byte> bts = new ArrayList<Byte>();
+				    		MainServer.debug.write("true");
+				    		for(byte b : s.replace("EndConnectedMessage", "").getBytes()){
+				    			bts.add(b);
+				    		}
+				    		readMessage(bts, sk);
 				    	}
 				    }
+				    sc.close();
+				    MainServer.log.write(sk.toString() + " disconnected");
 				    str.close();
 				} catch (Throwable e) {
-					MainServer.err.write("An Erroring Socket while Init");
+					MainServer.err.write("An erroring socket while init");
 					MainServer.err.writeTrace(e);
 				}
 			}
 		}).start();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	  }
 	}	
 	
 	public void sendMessageTo(Socket sk,Message msg){
@@ -69,7 +75,7 @@ public class BaseServer extends ServerSocket{
 		try {
 			sk.getOutputStream().write(args);
 		} catch (Throwable e) {
-			MainServer.err.write("Erroring Socket");
+			MainServer.err.write("Erroring socket");
 			MainServer.err.writeTrace(e);
 		}
 	}
