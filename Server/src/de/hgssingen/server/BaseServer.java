@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import de.hgssingen.server.msg.MUDID;
 import de.hgssingen.server.msg.Message;
 
 public class BaseServer extends ServerSocket{
@@ -41,7 +42,9 @@ public class BaseServer extends ServerSocket{
 				    	if(s.endsWith("EndConnectedMessage")){
 				    		ArrayList<Byte> bts = new ArrayList<Byte>();
 				    		MainServer.debug.write("true");
-				    		for(byte b : s.replace("EndConnectedMessage", "").getBytes()){
+				    		String sdr = s.replace("EndConnectedMessage", "");
+				    		byte[] btds = sdr.getBytes();
+				    		for(byte b : btds){
 				    			bts.add(b);
 				    		}
 				    		readMessage(bts, sk);
@@ -82,7 +85,7 @@ public class BaseServer extends ServerSocket{
 	
 	public void readMessage(ArrayList<Byte> bts,Socket s){
 		for(Message msg : Message.reader){
-			if(msg.isReader())
+			if(msg.isReader() && (MUDID.SOCKET_UDID.get(s) != null || msg.notNeedsAuth()))
 			msg.fromByte(bts,s);
 		}
 	}

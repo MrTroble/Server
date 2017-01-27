@@ -36,6 +36,7 @@ public class CommonLogger{
 	}	
 	
 	public void write(String x) {
+		if(x == null)x = "null";
 		byte[] args = x.getBytes();
         this.writeByte(args);
 	}
@@ -43,7 +44,7 @@ public class CommonLogger{
 	public void writeTrace(Throwable t){
 		if(t == null)return;
 		this.write(t.toString());
-		this.write(t.getMessage());
+		if(t.getMessage() != null)this.write(t.getMessage());
 		for(StackTraceElement e : t.getStackTrace()){
 			this.write(e.toString());
 		}

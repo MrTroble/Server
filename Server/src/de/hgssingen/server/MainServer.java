@@ -9,12 +9,16 @@ import de.hgssingen.server.log.CommonLogger;
 
 public class MainServer {
 
+	public static final String SEPERATOR = "[&m$]";
+	
 	private static BaseServer SERVER_INSTANCE; 
 	public static CommonLogger log;
 	public static CommonLogger err;
 	public static CommonLogger debug;
 	public static final ArrayList<Command> cmds = new ArrayList<>();
 
+	public static Database DATABASE = new Database();
+	
 	public static void startServer(int i){
 		
 		cmds.add(new CommandSetRoll());
@@ -52,25 +56,23 @@ public class MainServer {
 	}
 	
 	private static void awaitAdminInput() {
-		while(true){
-			Scanner in = new Scanner(System.in);
-			if(in.hasNextLine()){
-				String n = in.nextLine();
-				if(n.startsWith("/")){
-					String[] args = n.replaceFirst("/", "").split(" ");
-					String[] arg = new String[args.length - 1];
-					int i = 0;
-					for(String s : args){   
-						if(i != 0)arg[i - 1] = s;
-						i++;
-					}
-					for(Command c : cmds){
-						c.execute(args[0], arg);
-					}
+		Scanner in = new Scanner(System.in);
+		while(in.hasNextLine()){
+			String n = in.nextLine();
+			if(n.startsWith("/")){
+				String[] args = n.replaceFirst("/", "").split(" ");
+				String[] arg = new String[args.length - 1];
+				int i = 0;
+			    for(String s : args){   
+					if(i != 0)arg[i - 1] = s;
+					i++;
+				}
+				for(Command c : cmds){
+					c.execute(args[0], arg);
 				}
 			}
-			in.close();
 		}
+		in.close();
 	}
 
 	public static BaseServer getServer(){

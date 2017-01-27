@@ -15,9 +15,13 @@ public abstract class Message {
 	
 	public abstract boolean isWriter();
 	
-	public static void init(){
+    static {
 		reader.add(new MGetFiles());
 		reader.add(new MFile());
+		reader.add(new MUDID());
 	}
 	
+    public boolean notNeedsAuth(){
+		return false;
+    }
 }
