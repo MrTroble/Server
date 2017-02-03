@@ -89,7 +89,7 @@ public class Database {
 		return DBS.get(db).get(key);
 	}
 	
-    public void addValueIfNotExists(String db,String key,String value){
+    public void addValueIfNotExists(String db,String key,Object value){
     	JSONObject obj = this.DBS.get(db);
     	obj.put(key, value);
     	PrintWriter wr = creatJSONWriter(db, false);

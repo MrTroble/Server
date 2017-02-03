@@ -38,6 +38,7 @@ public class BaseServer extends ServerSocket{
 					Scanner sc = new Scanner(str);
 				    while(sc.hasNext()){
 				    	s += sc.next();
+				    	System.out.println(s);
 			    		MainServer.debug.write(s);
 				    	if(s.endsWith("EndConnectedMessage")){
 				    		ArrayList<Byte> bts = new ArrayList<Byte>();
@@ -48,6 +49,7 @@ public class BaseServer extends ServerSocket{
 				    			bts.add(b);
 				    		}
 				    		readMessage(bts, sk);
+				    		s = "";
 				    	}
 				    }
 				    sc.close();

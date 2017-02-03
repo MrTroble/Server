@@ -13,6 +13,7 @@ public class CommonLogger{
 	public FileOutputStream file_stream;
 	public String section;
 	public PrintStream stream;
+	public boolean silend;
 	
 	public CommonLogger(PrintStream str,String st) {
 		this.section = st;
@@ -56,7 +57,7 @@ public class CommonLogger{
 	private void writeByte(byte[] buf) {
 		try {
 		byte[] bu = String.format(getTime() + "[" + this.section + "]" + new String(buf) + "%n").getBytes();
-		this.stream.print(new String(bu));
+		if(!this.silend)this.stream.print(new String(bu));
 		this.file_stream.write(bu, 0, bu.length);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,6 +67,14 @@ public class CommonLogger{
 	public String getDate() {
 		Calendar c = Calendar.getInstance();
 		return c.get(Calendar.MONTH) + "-" + c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.YEAR);
+	}
+	
+	public void setSilend(boolean silend){
+		this.silend = silend;
+	}
+	
+	public boolean isSilend(){
+		return this.silend;
 	}
 	
 	@SuppressWarnings("deprecation")

@@ -22,6 +22,7 @@ public abstract class Command {
 	public void execute(String name,String[] args){
 		try{
 		if(this.name.equals(name)){
+			if(args == null)throw new NullPointerException("Command execution failed! Please try again.");
 			this.onCommand(args);
 		}
 		}catch(Throwable t){

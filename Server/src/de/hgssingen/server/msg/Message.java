@@ -3,6 +3,8 @@ package de.hgssingen.server.msg;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import de.hgssingen.server.command.Rolles;
+
 public abstract class Message {
 	
 	public static final ArrayList<Message> reader = new ArrayList<>();
@@ -23,5 +25,9 @@ public abstract class Message {
 	
     public boolean notNeedsAuth(){
 		return false;
+    }
+    
+    public Rolles getRequiredRoll(){
+    	return Rolles.ALL;
     }
 }

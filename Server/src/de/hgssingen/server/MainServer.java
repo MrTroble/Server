@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import de.hgssingen.server.command.Command;
+import de.hgssingen.server.command.CommandHelp;
 import de.hgssingen.server.command.CommandSetRoll;
 import de.hgssingen.server.log.CommonLogger;
 
 public class MainServer {
 
-	public static final String SEPERATOR = "[&m$]";
+	public static final String SEPERATOR = "#";
 	
 	private static BaseServer SERVER_INSTANCE; 
 	public static CommonLogger log;
@@ -22,6 +23,7 @@ public class MainServer {
 	public static void startServer(int i){
 		
 		cmds.add(new CommandSetRoll());
+		cmds.add(new CommandHelp());
 		
 		new Thread(new Runnable() {
 			

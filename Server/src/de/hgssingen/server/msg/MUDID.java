@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hgssingen.server.MainServer;
+import de.hgssingen.server.command.Rolles;
 import de.hgssingen.server.util.Util;
 
 public class MUDID extends Message{
@@ -19,11 +20,14 @@ public class MUDID extends Message{
 	public void fromByte(ArrayList<Byte> list, Socket sk) {
 		String str = new String(Util.toArray(list));
 		if(str.startsWith("UDID:")){
-			String[] sg = str.replace("UDID:", "").split(MainServer.SEPERATOR);
+			String[] sg = str.replaceFirst("UDID:", "").split(MainServer.SEPERATOR);
+			for(String s : sg){
+				MainServer.debug.write(s);
+			}
 			UDID_SOCKET.put(sg[0], sk);
 			SOCKET_UDID.put(sk, sg[0]);
-			MainServer.DATABASE.addValueIfNotExists("uuid", sg[0], sg[1]);
-			MainServer.log.write("Added " + sk + " with UDID: " + sg[0]);
+			MainServer.DATABASE.addValueIfNotExists("uuid", sg[0], new String[] {sg[1],Rolles.ALL.toString()});
+			MainServer.debug.write("Added " + sk + " with UDID: " + sg[0] + " and Name " + sg[1]);
 		}
 	}
 
