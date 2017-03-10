@@ -1,6 +1,6 @@
 package de.hgssingen.server.util;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Transformer<T> {
 

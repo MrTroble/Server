@@ -1,12 +1,11 @@
 package de.hgssingen.server.msg;
 
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.net.*;
+import java.util.*;
 
-import de.hgssingen.server.MainServer;
-import de.hgssingen.server.command.Rolles;
-import de.hgssingen.server.util.Util;
+import de.hgssingen.server.*;
+import de.hgssingen.server.command.*;
+import de.hgssingen.server.util.*;
 
 public class MUDID extends Message{
 

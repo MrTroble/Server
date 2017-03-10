@@ -1,6 +1,6 @@
 package de.hgssingen.server.command;
 
-import de.hgssingen.server.MainServer;
+import de.hgssingen.server.*;
 
 public class CommandHelp extends Command{
 

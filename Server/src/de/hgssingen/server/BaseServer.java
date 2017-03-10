@@ -1,14 +1,10 @@
 package de.hgssingen.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import de.hgssingen.server.msg.MUDID;
-import de.hgssingen.server.msg.Message;
+import de.hgssingen.server.msg.*;
 
 public class BaseServer extends ServerSocket{
 	
@@ -18,9 +14,7 @@ public class BaseServer extends ServerSocket{
 		super(i);
 		blockAndAccept();
 	}
-	//TODO Lock:
-	//https://developer.apple.com/library/prerelease/content/qa/qa1652/_index.html#//apple_ref/doc/uid/DTS40008977
-
+	
 	private void blockAndAccept() {
 		while(true){
 		Socket sk;
@@ -38,7 +32,6 @@ public class BaseServer extends ServerSocket{
 					Scanner sc = new Scanner(str);
 				    while(sc.hasNext()){
 				    	s += sc.next();
-				    	System.out.println(s);
 			    		MainServer.debug.write(s);
 				    	if(s.endsWith("EndConnectedMessage")){
 				    		ArrayList<Byte> bts = new ArrayList<Byte>();
@@ -82,6 +75,12 @@ public class BaseServer extends ServerSocket{
 		} catch (Throwable e) {
 			MainServer.err.write("Erroring socket");
 			MainServer.err.writeTrace(e);
+		}
+	}
+	
+	public void senMessage(Message msg){
+		for(Socket sk : this.skt){
+			this.sendMessageTo(sk, msg);
 		}
 	}
 	

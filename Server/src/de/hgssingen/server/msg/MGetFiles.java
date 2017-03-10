@@ -1,14 +1,13 @@
 package de.hgssingen.server.msg;
 
-import java.io.File;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import de.hgssingen.server.MainServer;
-import de.hgssingen.server.util.Util;
+import de.hgssingen.server.util.*;
 
 public class MGetFiles extends Message{
-	
+		
 	public MGetFiles() {
 		super();
 	}
@@ -20,13 +19,16 @@ public class MGetFiles extends Message{
 		for(String s : fl.list()){
 			Util.addToArray(list, (s + "\n").getBytes());
 		}
-		list.add(Byte.MAX_VALUE);
 	}
 
 	@Override
 	public void fromByte(ArrayList<Byte> list,Socket sk) {
-		if(new String(Util.toArray(list)).equals("request:files")){
-			MainServer.getServer().sendMessageTo(sk, this);
+		String str = new String(Util.toArray(list));
+		if(str.startsWith("request-files")){
+//			String[] File_SH = str.replaceFirst("request-files", "").split(",");
+//			for(String s : File_SH){
+//				String[] fl_sh_send = s.split(":");
+//			}
 		}
 	}
 

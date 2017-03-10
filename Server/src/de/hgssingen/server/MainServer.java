@@ -1,12 +1,10 @@
 package de.hgssingen.server;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
-import de.hgssingen.server.command.Command;
-import de.hgssingen.server.command.CommandHelp;
-import de.hgssingen.server.command.CommandSetRoll;
-import de.hgssingen.server.log.CommonLogger;
+import de.hgssingen.server.command.*;
+import de.hgssingen.server.log.*;
 
 public class MainServer {
 
@@ -17,13 +15,20 @@ public class MainServer {
 	public static CommonLogger err;
 	public static CommonLogger debug;
 	public static final ArrayList<Command> cmds = new ArrayList<>();
-
+	
 	public static Database DATABASE = new Database();
+	public static FileWatcher WATCHER;
 	
 	public static void startServer(int i){
 		
 		cmds.add(new CommandSetRoll());
 		cmds.add(new CommandHelp());
+		
+		try {
+			WATCHER = new FileWatcher(DATABASE.DATABASE_FOLDER.getAbsolutePath() + File.separator  + "folder");
+		} catch (Throwable e1) {
+			err.writeTrace(e1);
+		}
 		
 		new Thread(new Runnable() {
 			

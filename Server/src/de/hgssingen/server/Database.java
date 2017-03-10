@@ -1,15 +1,9 @@
 package de.hgssingen.server;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
-import org.json.JSONObject;
-import org.json.JSONWriter;
+import org.json.*;
 
 public class Database {
 

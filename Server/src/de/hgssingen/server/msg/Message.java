@@ -1,9 +1,9 @@
 package de.hgssingen.server.msg;
 
-import java.net.Socket;
-import java.util.ArrayList;
+import java.net.*;
+import java.util.*;
 
-import de.hgssingen.server.command.Rolles;
+import de.hgssingen.server.command.*;
 
 public abstract class Message {
 	

@@ -1,12 +1,10 @@
 package de.hgssingen.server.msg;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import de.hgssingen.server.MainServer;
-import de.hgssingen.server.util.Util;
+import de.hgssingen.server.*;
 
 public class MFile extends Message{
 
@@ -25,7 +23,6 @@ public class MFile extends Message{
 			list.add((byte) str.read());
 		}
 		str.close();
-		list.add(Byte.MAX_VALUE);
 		}catch(Throwable t){
 			MainServer.err.write("Error While Writing a File to Socket " + this.name);
 			MainServer.err.writeTrace(t);
@@ -33,18 +30,7 @@ public class MFile extends Message{
 	}
 
 	@Override
-	public void fromByte(ArrayList<Byte> list, Socket sk) {
-		try{
-		String str = new String(Util.toArray(list));
-		if(str.startsWith("requestfiles:")){
-			String st = str.split(":")[1]; 
-			MainServer.getServer().sendMessageTo(sk, new MFile(st));
-		}
-		}catch(Throwable t){
-			MainServer.err.write("Error While Reading a Message(File Request)");
-			MainServer.err.writeTrace(t);
-		}
-	}
+	public void fromByte(ArrayList<Byte> list, Socket sk) {}
 
 	@Override
 	public boolean isReader() {
