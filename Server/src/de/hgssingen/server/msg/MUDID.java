@@ -25,7 +25,7 @@ public class MUDID extends Message{
 			}
 			UDID_SOCKET.put(sg[0], sk);
 			SOCKET_UDID.put(sk, sg[0]);
-			MainServer.DATABASE.addValueIfNotExists("uuid", sg[0], new String[] {sg[1],Rolles.ALL.toString()});
+			MainServer.DATABASE.value("uuid", sg[0], new String[] {sg[1],Rolles.ALL.toString()});
 			MainServer.debug.write("Added " + sk + " with UDID: " + sg[0] + " and Name " + sg[1]);
 		}
 	}

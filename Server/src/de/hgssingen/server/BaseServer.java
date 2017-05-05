@@ -16,6 +16,8 @@ public class BaseServer extends ServerSocket{
 	}
 	
 	private void blockAndAccept() {
+		byte[] endMessage = {4};
+		String eMessage = new String(endMessage);
 		while(true){
 		Socket sk;
 		try {
@@ -32,24 +34,26 @@ public class BaseServer extends ServerSocket{
 					Scanner sc = new Scanner(str);
 				    while(sc.hasNext()){
 				    	s += sc.next();
-			    		MainServer.debug.write(s);
-				    	if(s.endsWith("EndConnectedMessage")){
-				    		ArrayList<Byte> bts = new ArrayList<Byte>();
-				    		MainServer.debug.write("true");
-				    		String sdr = s.replace("EndConnectedMessage", "");
-				    		byte[] btds = sdr.getBytes();
-				    		for(byte b : btds){
-				    			bts.add(b);
-				    		}
-				    		readMessage(bts, sk);
-				    		s = "";
-				    	}
+				    	MainServer.debug.write(s);
+			            if(s.endsWith(eMessage)){
+			            	ArrayList<Byte> bts = new ArrayList<Byte>();
+				    	    MainServer.debug.write("true");
+				    	    String sdr = s.replace(eMessage, "");
+				    	    byte[] btds = sdr.getBytes();
+				    	    for(byte b : btds){
+				    	    	bts.add(b);
+				    	    }
+				    	    readMessage(bts, sk);
+				    	    s = "";
+			            }
 				    }
 				    sc.close();
 				    MainServer.log.write(sk.toString() + " disconnected");
 				    str.close();
 				} catch (Throwable e) {
-					MainServer.err.write("An erroring socket while init");
+					if(sk != null)
+						try {sk.close();} catch (IOException e1) {MainServer.err.writeTrace(e1);}
+					MainServer.err.write("An erroring socket was detected");
 					MainServer.err.writeTrace(e);
 				}
 			}

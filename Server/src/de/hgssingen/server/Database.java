@@ -24,7 +24,7 @@ public class Database {
 	public PrintWriter creatJSONWriter(String name,boolean end){
 	    PrintWriter writer;
 		try {
-			writer = new PrintWriter(new FileOutputStream(newDatabaseFile(name)),true);
+			writer = new PrintWriter(new FileOutputStream(newDatabaseFile(name),end),true);
 		} catch (Exception e) {
 			writer = null;
 			MainServer.err.writeTrace(e);
@@ -64,26 +64,42 @@ public class Database {
 		if(DBS.containsKey(db)){
 			return false;
 		}else{
-			Scanner sc = creatScannerObject(db);
-			String sting = "";
-			while(sc.hasNextLine()){
-				sting += sc.nextLine() + String.format("%n");
-			}
-			sc.close();
-			JSONObject json = new JSONObject(sting);
-			DBS.put(db, json);
+			reload(db);
 			return true;
 		}
 	}
 	
-	public Object getKeyFromDatabase(String db,String key){
-		if(!DBS.containsKey(db)){
-			loadToRuntime(db);
+	public void reload(String db){
+		Scanner sc = creatScannerObject(db);
+		String sting = "";
+		while(sc.hasNextLine()){
+			sting += sc.nextLine() + String.format("%n");
 		}
-		return DBS.get(db).get(key);
+		sc.close();
+		JSONObject json = new JSONObject(sting);
+		DBS.put(db, json);
 	}
 	
-    public void addValueIfNotExists(String db,String key,Object value){
+	public Object getKeyFromDatabase(String db,String key){
+		try{
+			if(!DBS.containsKey(db)){
+				loadToRuntime(db);
+			}
+			return DBS.get(db).get(key);
+		}catch(JSONException ex){
+			MainServer.debug.write("Key not found (Json Exception)");
+			MainServer.debug.writeTrace(ex);
+			return null;
+		}
+	}
+	
+	public File createNewFolder(String str){
+		File fl = new File(DATABASE_FOLDER.getAbsolutePath() + "/" + str);
+		fl.mkdirs();
+		return fl;
+	}
+	
+    public void value(String db,String key,Object value){
     	JSONObject obj = this.DBS.get(db);
     	obj.put(key, value);
     	PrintWriter wr = creatJSONWriter(db, false);

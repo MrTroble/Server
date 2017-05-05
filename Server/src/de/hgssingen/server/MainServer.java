@@ -25,7 +25,7 @@ public class MainServer {
 		cmds.add(new CommandHelp());
 		
 		try {
-			WATCHER = new FileWatcher(DATABASE.DATABASE_FOLDER.getAbsolutePath() + File.separator  + "folder");
+			WATCHER = new FileWatcher(DATABASE.DATABASE_FOLDER.getAbsolutePath() + File.separator  + "Files");
 		} catch (Throwable e1) {
 			err.writeTrace(e1);
 		}
